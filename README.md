@@ -5,8 +5,9 @@ Haichao Zhu*, Qian Zhang*, Jiyuan Wang, Zhaorui Yang, and Yuxin Qiu (* indicates
 
 TL;DR: Needle in the Repo (NITR) is a C++ repository-level benchmark for evaluating whether
 AI-generated repository edits preserve maintainable structure, not just
-behavioral correctness. It comprises 21 curated C++ repository probes across
-nine maintainability dimensions, pairing natural multi-file change requests
+behavioral correctness. The repository currently contains 22 curated C++
+repository probes across nine maintainability dimensions, pairing natural
+multi-file change requests
 with hidden functional tests and structural oracles. The benchmark is designed
 to expose cases where an agent produces behaviorally correct code that still
 introduces maintainability failures such as weak modularity, poor testability,
@@ -19,13 +20,13 @@ or architectural shortcutting.
 
 ![Pass/fail heatmap of 23 evaluated configurations across 21 cases.](docs/result_heatmap.png)
 
-*Figure: Pass/fail heatmap of 23 evaluated configurations across 21 cases from the paper.*
+*Figure: Pass/fail heatmap of 23 evaluated configurations across the 21-case paper release.*
 
 ## Overview
 
 This repository contains the public benchmark release:
 
-- 21 starter cases under `cases/`
+- 22 starter cases under `cases/`
 - case specifications and design docs under `docs/`
 - public evaluator code under `evaluator/`
 - agent-facing task statements (`TASK.md`, `TASK1.md`, ...)
@@ -173,6 +174,7 @@ on before running the evaluator.
 - `019.ranking-explainability-boundary`
 - `020.handover-packet-ownership-boundary`
 - `021.inline-filter-entrypoint-reuse`
+- `022.as-of-eligibility-evaluation`
 
 ## Citation
 

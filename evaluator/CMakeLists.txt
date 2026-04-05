@@ -11,6 +11,9 @@ find_program(BASH_PROGRAM bash)
 
 option(CASE015_ENABLE_VISIBLE_CHECKS "Run visible structural checks via CTest" ON)
 option(CASE015_ENABLE_HIDDEN_EVALUATOR "Enable hidden tests and hidden checks" OFF)
+option(CASE022_ENABLE_HIDDEN_EVALUATOR
+       "Enable explicit-time functional tests and structural checks for case 022"
+       OFF)
 
 function(nitr_case_source_dir out_var case_dir)
   set(${out_var} ${CMAKE_SOURCE_DIR}/cases/${case_dir} PARENT_SCOPE)
@@ -334,6 +337,21 @@ function(nitr_register_case_021)
   add_test(NAME case021_functional_tests COMMAND case021_evaluator_tests)
 endfunction()
 
+function(nitr_register_case_022)
+  nitr_case_source_dir(CASE_DIR 022.as-of-eligibility-evaluation)
+  nitr_case_evaluator_dir(EVAL_DIR 022.as-of-eligibility-evaluation)
+  nitr_add_plain_test(case022_functional_tests case022_lib ${EVAL_DIR}/tests/eligibility_service_test.cc)
+
+  if(CASE022_ENABLE_HIDDEN_EVALUATOR)
+    nitr_add_plain_test(case022_as_of_tests case022_lib ${EVAL_DIR}/tests/as_of_evaluator_test.cc)
+    add_test(
+      NAME case022_structural_checks
+      COMMAND ${Python3_EXECUTABLE} ${EVAL_DIR}/checks/check_structure.py ${CASE_DIR}
+    )
+    set_tests_properties(case022_structural_checks PROPERTIES WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+  endif()
+endfunction()
+
 function(nitr_add_evaluator case_dir)
   if(case_dir STREQUAL "001.add-no-callsite-spread")
     nitr_register_case_001()
@@ -377,6 +395,8 @@ function(nitr_add_evaluator case_dir)
     nitr_register_case_020()
   elseif(case_dir STREQUAL "021.inline-filter-entrypoint-reuse")
     nitr_register_case_021()
+  elseif(case_dir STREQUAL "022.as-of-eligibility-evaluation")
+    nitr_register_case_022()
   endif()
 endfunction()
 
@@ -402,6 +422,7 @@ if(NITR_BUILD_ALL_CASES)
   nitr_add_evaluator(019.ranking-explainability-boundary)
   nitr_add_evaluator(020.handover-packet-ownership-boundary)
   nitr_add_evaluator(021.inline-filter-entrypoint-reuse)
+  nitr_add_evaluator(022.as-of-eligibility-evaluation)
 elseif(NOT NITR_CASE STREQUAL "")
   nitr_add_evaluator(${NITR_CASE})
 endif()
